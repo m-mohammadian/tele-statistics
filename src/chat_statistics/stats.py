@@ -1,4 +1,5 @@
 import json
+from inspect import ArgInfo
 from pathlib import Path
 from typing import Dict, Union
 
@@ -6,7 +7,7 @@ import arabic_reshaper
 from bidi.algorithm import get_display
 from hazm import Normalizer, word_tokenize
 from loguru import logger
-from src.data import DATAR_DIR
+from src.data import DATA_DIR
 from wordcloud import WordCloud
 
 
@@ -26,8 +27,8 @@ class ChatStatistics:
         self.normalizer = Normalizer()
 
         #load stopwords
-        logger.info(f"Loading stopwords from {DATAR_DIR / 'stopwords.txt'}")
-        stop_words = open(DATAR_DIR / 'stop_words.txt').readlines()
+        logger.info(f"Loading stopwords from {DATA_DIR / 'stopwords.txt'}")
+        stop_words = open(DATA_DIR / 'stop_words.txt').readlines()
         stop_words = list(map(str.strip, stop_words))
         self.stop_words = list(map(self.normalizer.normalize, stop_words))
 
@@ -53,9 +54,9 @@ class ChatStatistics:
         logger.info(f"Generating word cloud ...")
         # generate word cloud
         wordcloud = WordCloud(
-            font_path=str(DATAR_DIR / '/BHoma.ttf'), background_color='white'
-            width: int = 800, height: int = 600, 
-            margin: int = 2, max_words: int = 200, max_font_size: int = 40,
+            font_path=str(DATA_DIR / '/BHoma.ttf'), background_color='white', 
+            width= 800, height= 600, 
+            margin=2, max_words=200, max_font_size=40,
             ).generate(text_content)
 
     
@@ -65,6 +66,6 @@ class ChatStatistics:
 
 
 if __name__ == "__main__":
-    chat_stats = ChatStatistics(chat_json=DATAR_DIR / "ML.json")
-    chat_stats.generate_word_cloud(output_dir=DATAR_DIR)
+    chat_stats = ChatStatistics(chat_json=DATA_DIR / "ML.json")
+    chat_stats.generate_word_cloud(output_dir=DATA_DIR)
     print('Done!')
